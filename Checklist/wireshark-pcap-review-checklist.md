@@ -1,6 +1,5 @@
 # 🧠 PCAP Review Checklist (Wireshark-Focused)
 
-This checklist is based on the guide from InsaneCyber: [Mastering PCAP Review](https://insanecyber.com/mastering-pcap-review/).  
 It’s designed to help you triage, analyze, and extract actionable insights from packet captures using **Wireshark + your brain**.
 
 ---
