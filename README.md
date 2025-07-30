@@ -1,4 +1,4 @@
-# 🧠 Network Packet Analysis Lab — Wireshark + My Brain
+# 🧠 Network Packet Analysis Lab — Wireshark
 
 This lab explores how to identify suspicious, malicious, or misconfigured behavior in packet captures using only **Wireshark** and **my brain**. Below are all the types of scenarios I look for and break down in this lab.
 
