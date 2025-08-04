@@ -1,147 +1,150 @@
+# 🕵️‍♂️ Network Traffic Analysis - Threat Scenario PCAP Index
 
-# 🧠 Curated PCAPs by Threat Type
-
-This file organizes key PCAP exercises from [malware-traffic-analysis.net](https://www.malware-traffic-analysis.net/) according to specific threat detection categories in cybersecurity.
+This README provides a categorized index of PCAPs from [malware-traffic-analysis.net](https://www.malware-traffic-analysis.net/training-exercises.html) for hands-on practice in detecting various types of malicious network activity. These scenarios are ideal for SOC analyst training, malware traffic analysis, or home lab enrichment.
 
 ---
 
-## 🕵️‍♂️ 1. Command-and-Control (C2) Traffic
-Look for beaconing, POSTs with encoded payloads, suspicious subdomains:
+## 🔐 1. Command-and-Control (C2) Traffic
+
+**Objective:** Identify beaconing, C2 POSTs, fake domains, and abnormal TLS usage.
 
 - **2025-06-13 — It’s a Trap!**  
-  *Focus: TLS + strange domains (fake Cloudflare decoy + C2 communication)*
-
+  *TLS handshake + fake Cloudflare decoy + suspicious domains*
 - **2023-04 — Cold as Ice (IcedID)**  
-  *Focus: IcedID uses HTTPS C2 with regular intervals*
-
+  *C2 traffic using HTTPS with regular beaconing intervals*
 - **2024-11-26 — Nemotodes**  
-  *Likely includes malware families that beacon*
-
+  *Likely contains malware beaconing with odd intervals*
 - **2023-07 — RedLine Stealer (Wireshark Quiz)**  
-  *C2 over HTTP/HTTPS + encoded blobs*
+  *RedLine C2 over HTTP/S + base64/hex-encoded blobs*
 
 ---
 
 ## 📤 2. Data Exfiltration
-Look for large outbound, DNS tunneling, POST blobs, FTP uploads:
+
+**Objective:** Detect data leaving the network via HTTP POST, DNS tunneling, or cleartext uploads.
 
 - **2023-03 — Finding Gozi**  
-  *Gozi often exfiltrates through POST + possible DNS*
-
+  *Exfiltration using HTTP POSTs + potential DNS abuse*
 - **2022-03-21 — Burnincandle**  
-  *Features large HTTP POSTs and fake traffic volume*
-
+  *Massive POST body size indicating possible data dump*
 - **2021-09-10 — Angry Poutine**  
-  *DNS tunneling and custom exfiltration methods*
+  *DNS tunneling traffic pattern with encoded TXT records*
 
 ---
 
 ## 🧪 3. Protocol Misuse / Tunneling
-DNS, ICMP tunnels, GET abuse, non-standard TLS:
+
+**Objective:** Spot abuse of ICMP, DNS, HTTP, or TLS for covert channels.
 
 - **2020-10-22 — Omegacast**  
-  *Rare protocols and encoded HTTP GETs*
-
+  *Non-standard HTTP GETs with payloads*
 - **2020-04-24 — Steelcoffee**  
-  *DNS used in odd ways*
-
+  *DNS-based covert data channels*
 - **2019-12-25 — Christmas Day**  
-  *Known for exotic protocol use (check for TLS on port ≠ 443)*
+  *TLS on ports other than 443 = tunneling*
 
 ---
 
 ## 💥 4. Exploits / Payload Delivery
-Drive-by, PE headers in HTTP, exploit kits:
+
+**Objective:** Detect drive-by attacks, malware downloads, and PE headers in HTTP.
 
 - **2025-01-22 — Fake Software Site**  
-  *Likely includes PE file delivery*
-
+  *Suspicious site delivering PE files (.exe)*
 - **2020-05-28 — Catbomber**  
-  *Delivers executable via HTTP, suspicious response headers*
-
+  *HTTP transfer of binaries + odd MIME types*
 - **2019-11-12 — Okay-Boomer**  
-  *Clear exploit chain and payload*
+  *Exploit kit-style traffic flow with redirects*
 
 ---
 
 ## 🧑‍💻 5. Credential Theft / Info Stealers
-Cleartext logins, user/pass/hwid parameters:
+
+**Objective:** Identify cleartext credentials, form submissions, and suspicious POST parameters.
 
 - **2023-02 — Unit 42 Wireshark Quiz**  
-  *Focus on basic auth and exposed creds*
-
+  *Cleartext basic auth seen in headers*
 - **2022-02-23 — Sunnystation**  
-  *Login form POST parameters observed*
-
+  *Credentials passed via POST body (user/pass fields)*
 - **2018-12-18 — Eggnog Soup**  
-  *Formbook-like credential theft traffic*
+  *Formbook-style traffic pattern with credential theft*
 
 ---
 
 ## 🧅 6. Man-in-the-Middle (MITM) Attacks
-Self-signed certs, SSL stripping, ARP spoofing:
+
+**Objective:** Spot spoofing attempts, rogue devices, and downgraded encryption.
 
 - **2020-08-04 — Pizza-Bender**  
-  *TLS anomalies + possible MITM attempt*
-
+  *Certificate anomalies + fake TLS fingerprinting*
 - **2016-02-06 — Cupid's Arrow**  
-  *Duplicate ARP traffic likely (classic MITM tell)*
-
+  *ARP spoofing indicators with duplicate replies*
 - **2015-07-11 — Pyndrine Industries**  
-  *Contains rogue DHCP + cert oddities*
+  *Rogue DHCP and fake certificates*
 
 ---
 
 ## 🌐 7. DNS Anomalies
-NXDOMAINs, fast-flux, DGA domains:
+
+**Objective:** Detect DGAs, DNS floods, and failed lookups.
 
 - **2024-08-15 — WarmCookie**  
-  *Includes heavy DNS abuse*
-
+  *Fast-flux domain resolution and DGA signs*
 - **2021-07-14 — Dualrunning**  
-  *DGA-like DNS queries*
-
+  *Randomized subdomain queries resembling DGA*
 - **2018-09-27 — Blank Clipboard**  
-  *NXDOMAIN floods*
+  *Multiple NXDOMAINs from repeated failed lookups*
 
 ---
 
-## 📈 8. Scanning & Recon
-SYN scans, XMAS/NULL, DNS brute force:
+## 📈 8. Scanning & Reconnaissance
+
+**Objective:** Spot recon attempts using common scanning tools.
 
 - **2020-03-14 — Mondogreek**  
-  *Masscan/Nmap scan behavior*
-
+  *Masscan or Nmap-style SYN scans*
 - **2019-06-22 — Phenomenoc**  
-  *SMB enumeration*
-
+  *SMB enumeration traffic to internal shares*
 - **2017-03-25 — March Madness**  
-  *Scan patterns observed*
+  *Multiple port scan types in sequence*
 
 ---
 
 ## 🛜 9. Lateral Movement
-SMB admin shares, RPC, WMI, RDP:
+
+**Objective:** Identify unauthorized access within a local network.
 
 - **2021-12-08 — ISC Contest**  
-  *Internal lateral movement patterns*
-
+  *Lateral SMB + RPC/WMI activity between hosts*
 - **2020-09-25 — Trouble Alert**  
-  *RDP between internal IPs*
-
+  *RDP sessions to internal IPs*
 - **2018-06-30 — Sorting Through the Alerts**  
-  *SMB brute + internal recon*
+  *SMB brute-force to admin shares*
 
 ---
 
 ## 📡 10. Suspicious Connections
-TOR nodes, rare ports, obsolete protocols:
+
+**Objective:** Detect outbound connections to suspicious hosts or unusual protocols.
 
 - **2024-07-30 — You Dirty Rat**  
-  *Suspicious outbound to weird port + C2 fanout*
-
+  *Multiple C2 connections on strange ports*
 - **2020-01-30 — Sol-Lightnet**  
-  *Telnet and weird port activity*
-
+  *Outbound Telnet + weird high-numbered ports*
 - **2017-12-15 — Two pcaps, two emails**  
-  *Multiple threat types, including legacy protocols*
+  *Old protocols + malware over SMTP/FTP*
+
+---
+
+## 📁 Usage
+
+You can create folders such as:
+
+- `Pcaps/` – Place the downloaded `.pcap` files here.
+- `Checklist/` – Add YAML or markdown checklists to track what you've detected in each.
+- `Reference/` – Include notes, extracted IOCs, or decoded payloads.
+
+Use Wireshark, Zeek, or tshark to inspect each scenario and develop detection skills.
+
+---
+
