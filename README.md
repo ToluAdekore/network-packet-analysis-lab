@@ -3,6 +3,18 @@
 This README provides a categorized index of PCAPs from [malware-traffic-analysis.net](https://www.malware-traffic-analysis.net/training-exercises.html) for hands-on practice in detecting various types of malicious network activity. These scenarios are ideal for SOC analyst training, malware traffic analysis, or home lab enrichment.
 
 ---
+## 🔧 My Wireshark Setup
+I use custom Wireshark profiles to speed up analysis and focus on specific traffic types:
+
+**Basic – Minimal packet view for fast protocol scanning.
+
+Basic+ – Adds Host, Server Name, and Info columns for better context.
+
+Basic + DNS – Includes DNS query/response details for identifying suspicious domain activity quickly.
+
+These profiles allow me to switch between general packet review, enriched HTTPS inspection, and DNS-focused hunting without manually toggling settings.
+
+---
 
 ## 🔐 1. Command-and-Control (C2) Traffic
 
