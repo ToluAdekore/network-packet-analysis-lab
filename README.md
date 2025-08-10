@@ -6,9 +6,9 @@ This README provides a categorized index of PCAPs from [malware-traffic-analysis
 ## 🔧 My Wireshark Setup
 I use custom Wireshark profiles to speed up analysis and focus on specific traffic types:
 
-**Basic – Minimal packet view for fast protocol scanning.
+Basic – Minimal packet view for fast protocol scanning.
 
-Basic+ – Adds Host, Server Name, and Info columns for better context.
+Basic + – Adds Host, Server Name, and Info columns for better context.
 
 Basic + DNS – Includes DNS query/response details for identifying suspicious domain activity quickly.
 
