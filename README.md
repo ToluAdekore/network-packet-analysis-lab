@@ -13,7 +13,7 @@ I acted as both:
 ## 🖥️ Lab Setup
 - **Attacker:** Kali Linux (`192.168.2.131`)
 - **Victim:** Windows 10 FLARE VM (`192.168.2.129`)
-- **Sniffer/Analyst:** Wireshark/tcpdump running on Kali or Security Onion for packet capture.
+- **Sniffer:** Wireshark (running on Windows for packet capture). For this lab, I applied custom filters along with Basic, Basic+, and Basic+DNS profiles to reduce noise and highlight relevant traffic. This allowed me to focus on HTTP requests, TLS handshakes, and DNS queries, while filtering out unnecessary broadcast traffic.
 - **Network:** VirtualBox Host-Only Network (isolated for safety).
 - **Tools Used:** msfvenom, netcat (nc), certutil, ftp, custom scripts for beaconing; Wireshark for analysis; Sysmon for endpoint correlation (where applicable).
 
@@ -43,7 +43,7 @@ Executed the payload on the victim to establish a reverse shell back to the atta
 ### Blue Team Detection (Wireshark):
 Filter:
  ```wireshark
-wiresharktcp.port == 4444
+(http.request or tls.handshake.type==1) and !(ssdp)
  ```
 
 Observed outbound connection from victim to attacker, followed by command execution (e.g., whoami or dir in the TCP stream).
@@ -66,11 +66,9 @@ Blue Team Detection (Wireshark):
 
 Filter:
  ```wireshark
-wiresharkhttp.request and http contains "POST"
+(http.request or tls.handshake.type==1) and !(ssdp)
  ```
-
-Detected large outbound HTTP POST requests with file attachments; reconstructed the file contents from the stream.
-Sysmon Integration: Event ID 1 - Process Create for curl.exe with suspicious command-line arguments.
+Focused on HTTP requests and TLS handshakes while filtering out SSDP noise. Detected abnormal outbound HTTP POST traffic with file uploads, then reconstructed the exfiltrated file from the stream. Sysmon logs (Event ID 1) confirmed curl.exe execution with suspicious command-line arguments.
 MITRE Mapping: T1041 – Exfiltration Over C2 Channel; T1567 – Exfiltration Over Web Service.
 
 ---
