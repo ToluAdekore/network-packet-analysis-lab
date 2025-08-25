@@ -66,7 +66,7 @@ Filter:
  ```wireshark
 (http.request or tls.handshake.type==1) and !(ssdp)
  ```
-Focused on HTTP requests and TLS handshakes while filtering out SSDP noise. Detected abnormal outbound HTTP POST traffic with file uploads, then reconstructed the exfiltrated file from the stream. Sysmon logs (Event ID 1) confirmed curl.exe execution with suspicious command-line arguments.
+Focused on HTTP requests and TLS handshakes while filtering out SSDP noise. Detected abnormal outbound HTTP POST traffic with file uploads, then reconstructed the exfiltrated file from the stream.
 MITRE Mapping: T1041 – Exfiltration Over C2 Channel; T1567 – Exfiltration Over Web Service.
 
 ---
