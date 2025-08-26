@@ -234,84 +234,46 @@ MITRE Mapping: T1566 – Phishing; T1598 – Phishing for Information.
 
 📂 Evidence Collected
 
-reverse_shell.pcap → Reverse shell traffic capture
-data_exfiltration.pcap → HTTP exfiltration traffic
-credential_harvest.pcap → Simulated dumping and exfil
-beaconing.pcap → Periodic C2 check-ins
-ftp_exfiltration.pcap → Clear-text FTP transfer
-dns_tunneling.pcap → DNS-based C2
-smb_lateral.pcap → SMB movement
-ransomware_encryption.pcap → File encryption and exfil
-phishing_callback.pcap → DNS resolution and callback
-Screenshots/Text Logs: Attacker listeners (e.g., nc), victim commands, Wireshark filters, and stream reconstructions.
+### PCAP Traffic Captures
 
+| File Name                     | Description                         |
+|-------------------------------|-------------------------------------|
+| `reverse_shell.pcap`           | Reverse shell traffic capture        |
+| `data_exfiltration.pcap`       | HTTP exfiltration traffic            |
+| `credential_harvest.pcap`      | Simulated dumping and exfiltration  |
+| `beaconing.pcap`               | Periodic C2 check-ins                |
+| `ftp_exfiltration.pcap`        | Clear-text FTP transfer              |
+| `dns_tunneling.pcap`           | DNS-based C2                         |
+| `smb_lateral.pcap`             | SMB lateral movement                 |
+| `ransomware_encryption.pcap`   | File encryption and exfiltration     |
+| `phishing_callback.pcap`       | DNS resolution and callback          |
+---
 
-🛡️ SOC Analyst Takeaways
+### Threat Observations
 
-Reverse shells often manifest as persistent outbound connections to non-standard ports with interactive data.
-Exfiltration is detectable via anomalous data volumes in HTTP/FTP/SMB traffic.
-Credential dumping shows encoded or unusual payloads in POST requests.
-Beaconing reveals timed, repetitive patterns without user interaction.
-DNS tunneling appears as oversized or high-volume queries.
-SMB lateral movement involves admin share access and file transfers.
-Ransomware traffic includes rapid file operations followed by exfil.
-Phishing callbacks start with suspicious DNS resolutions to unknown domains.
-Recommendations: Implement network segmentation, monitor non-standard ports, and use behavioral analytics for anomaly detection.
+- **Reverse Shells:** Often manifest as persistent outbound connections to non-standard ports with interactive data.  
+- **Data Exfiltration:** Detectable via anomalous data volumes in HTTP, FTP, or SMB traffic.  
+- **Credential Dumping:** Shows encoded or unusual payloads in POST requests.  
+- **Beaconing:** Reveals timed, repetitive patterns without user interaction.  
+- **DNS Tunneling:** Appears as oversized or high-volume queries.  
+- **SMB Lateral Movement:** Involves admin share access and file transfers.  
+- **Ransomware Traffic:** Includes rapid file operations followed by exfiltration.  
+- **Phishing Callbacks:** Start with suspicious DNS resolutions to unknown domains.  
+
+ 
+---
 
 
 📊 MITRE ATT&CK Mapping
 
-ScenarioTechnique IDNameReverse ShellT1071, T1059Application Layer Protocol (C2); Command and Scripting InterpreterData ExfiltrationT1041, T1567Exfiltration Over C2 Channel; Exfiltration Over Web ServiceCredential HarvestingT1003, T1040OS Credential Dumping; Network SniffingBeaconingT1071.001, T1571Application Layer Protocol: Web Protocols; Non-Standard PortFTP ExfiltrationT1048, T1020Exfiltration Over Alternative Protocol; Automated ExfiltrationDNS TunnelingT1071.004, T1572Application Layer Protocol: DNS; Protocol TunnelingSMB Lateral MovementT1021.002, T1570Remote Services: SMB/Windows Admin Shares; Lateral Tool TransferRansomware SimulationT1486, T1041Data Encrypted for Impact; Exfiltration Over C2 ChannelPhishing Link ResolutionT1566, T1598Phishing; Phishing for Information
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ScenarioTechnique IDNameReverse ShellT1071, T1059Application Layer Protocol (C2); Command and Scripting InterpreterData ExfiltrationT1041, T1567Exfiltration Over C2 Channel; Exfiltration Over Web ServiceCredential HarvestingT1003, T1040OS Credential Dumping; Network SniffingBeaconingT1071.001, T1571Application Layer Protocol: Web Protocols; Non-Standard PortFTP ExfiltrationT1048, T1020Exfiltration Over Alternative Protocol; Automated ExfiltrationDNS TunnelingT1071.004, T1572Application Layer Protocol: DNS; Protocol TunnelingSMB Lateral MovementT1021.002, T1570Remote Services: SMB/Windows Admin Shares; Lateral Tool TransferRansomware SimulationT1486, T1041Data Encrypted for Impact; Exfiltration Over C2 ChannelPhishing Link ResolutionT1566, T1598Phishing; Phishing for Information
+| Scenario                 | Technique ID           | Name                                               |
+|--------------------------|----------------------|--------------------------------------------------|
+| Reverse Shell            | T1071, T1059         | Application Layer Protocol (C2); Command and Scripting Interpreter |
+| Data Exfiltration        | T1041, T1567         | Exfiltration Over C2 Channel; Exfiltration Over Web Service |
+| Credential Harvesting    | T1003, T1040         | OS Credential Dumping; Network Sniffing         |
+| Beaconing                | T1071.001, T1571     | Application Layer Protocol: Web Protocols; Non-Standard Port |
+| FTP Exfiltration         | T1048, T1020         | Exfiltration Over Alternative Protocol; Automated Exfiltration |
+| DNS Tunneling            | T1071.004, T1572     | Application Layer Protocol: DNS; Protocol Tunneling |
+| SMB Lateral Movement     | T1021.002, T1570     | Remote Services: SMB/Windows Admin Shares; Lateral Tool Transfer |
+| Ransomware Simulation    | T1486, T1041         | Data Encrypted for Impact; Exfiltration Over C2 Channel |
+| Phishing Link Resolution | T1566, T1598         | Phishing; Phishing for Information              |
