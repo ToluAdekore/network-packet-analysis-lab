@@ -230,9 +230,9 @@ Sysmon Integration: Event ID 22 - DNS Query for suspicious resolutions.
 MITRE Mapping: T1566 – Phishing; T1598 – Phishing for Information.
 
 
+---
 
-
-📂 Evidence Collected
+### 📂 Evidence Collected
 
 ### PCAP Traffic Captures
 
@@ -264,7 +264,7 @@ MITRE Mapping: T1566 – Phishing; T1598 – Phishing for Information.
 ---
 
 
-📊 MITRE ATT&CK Mapping
+### 📊 MITRE ATT&CK Mapping
 
 | Scenario                 | Technique ID           | Name                                               |
 |--------------------------|----------------------|--------------------------------------------------|
