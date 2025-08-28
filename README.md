@@ -89,7 +89,6 @@ wiresharktls.handshake.extensions_server_name == attacker.domain && http.request
  ```
 
 Identified encrypted POST data with patterns matching base64-encoded credentials; noted unusual process connections.
-Sysmon Integration: Event ID 1 - Process Create for mimikatz.exe.
 MITRE Mapping: T1003 – OS Credential Dumping; T1040 – Network Sniffing.
 
 ---
@@ -111,7 +110,6 @@ wiresharkhttp.request.uri contains "beacon" and tcp.port == 8080
  ```
 
 Detected regular, timed outbound GET requests with no payload variation, indicating automated C2.
-Sysmon Integration: Event ID 3 - Network Connection showing repeated connections.
 MITRE Mapping: T1071.001 – Application Layer Protocol: Web Protocols; T1571 – Non-Standard Port.
 
 ---
@@ -138,7 +136,6 @@ wiresharkftp or ftp-data
  ```
 
 Captured clear-text FTP commands, credentials, and file transfers; reconstructed the uploaded file.
-Sysmon Integration: Event ID 11 - File Create on the attacker side for the received file.
 MITRE Mapping: T1048 – Exfiltration Over Alternative Protocol; T1020 – Automated Exfiltration.
 
 
@@ -160,7 +157,6 @@ Filter:
 wiresharkdns.qry.type == TXT or dns.qry.type == AAAA
 
 Observed unusually long or frequent DNS queries with encoded payloads, indicating tunneling.
-Sysmon Integration: Event ID 22 - DNS Query for suspicious domains.
 MITRE Mapping: T1071.004 – Application Layer Protocol: DNS; T1572 – Protocol Tunneling.
 
 ---
@@ -182,7 +178,6 @@ Filter:
 wiresharksmb2 or smb
 
 Detected SMB sessions with file listings or writes; noted unusual authentication attempts.
-Sysmon Integration: Event ID 3 - Network Connection to SMB ports (445).
 MITRE Mapping: T1021.002 – Remote Services: SMB/Windows Admin Shares; T1570 – Lateral Tool Transfer.
 
 
@@ -204,7 +199,6 @@ Filter:
 wiresharkhttp contains "encrypted" or tls.handshake.extensions_server_name == "attacker.domain"
 
 Identified rapid file access patterns followed by exfiltration; reconstructed encrypted file metadata.
-Sysmon Integration: Event ID 11 - File Create for .encrypted files.
 MITRE Mapping: T1486 – Data Encrypted for Impact; T1041 – Exfiltration Over C2 Channel.
 
 ---
