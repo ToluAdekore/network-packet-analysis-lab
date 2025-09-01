@@ -12,7 +12,7 @@ This scenario simulates an attacker moving laterally in a Windows environment us
 The attacker used valid credentials (`MalwareLab:Tolu2121!`) to connect to the victim's custom share (`TestShare`).
 
 ```bash
-smbclient //192.168.2.129/TestShare -U 'MalwareLab%Tolu2121!'
+smbclient //192.168.2.129/TestShare -U 'MalwareLab!%Tolu2121'
 ```
 
 📷 **Connection Established:**
